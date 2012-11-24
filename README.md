@@ -1,7 +1,7 @@
 Interactive_Spheres
 ===================
 
-#Interactive 3D sphere application - A fun application where the user will be able to use touch OSC to control the behaviour of spherical shapes)
+#Interactive 3D sphere application - A fun application where the user will be able to use touch OSC to control the behaviour of spherical shapes
 
 ## Features
 
@@ -22,9 +22,9 @@ This project was created by:
 
 ### Major components:
 
-* Processing.js
-*Max/MSP [to be created]
-*touchOSC
+* Processing
+* Max/MSP patch [to be created]
+* TouchOSC
 
 ### Everything else:
 
