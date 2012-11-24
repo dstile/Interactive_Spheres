@@ -10,7 +10,7 @@
  a. Create constructor that builds each new ball
  2. Add velocity vectors to ball
  3. Add lightening within the ball
- */
+  */
 
 import processing.opengl.*;
 
@@ -35,21 +35,19 @@ void setup() {
   sphere3 = new Spheredef(-200, 200, 500);
   sphere4 = new Spheredef(-200, -200, 500);
   sphere5 = new Spheredef(500, 100, 0);
-  background(250);
+ 
 }
 
 void draw() {
-
+ background(250);
   rotateX(radians(180));
   translate(width/2, -1*(height/2), 1000);
   /*rotateX(radians(frameCount));
    rotateY(radians(frameCount));
    rotateZ(radians(frameCount));*/
 
-  //sphere.move();
-  //sphere5.color();
-  sphere1.setColor(red,green,blue);
-  sphere1.setRadius(100);
+  sphere1.move();
+  sphere1.setColor(red, green, blue);
   sphere1.display();
   sphere2.rotSphere();
   sphere2.display();
@@ -71,16 +69,15 @@ class Spheredef {
   int red;
   int green;
   int blue;
-  float sphereRadius;
+  int sphereRadius;
 
   Spheredef(int x, int y, int z) {
     centerX=x;
     centerY=y;
     centerZ=z;
-    sphereRadius=random(200);
+    sphereRadius=int(random(200));
     fillColor=strokeColor=color(random(255), random(255), random(255));
     sphereCenter= new PVector(centerX, centerY, centerZ);
-    
   }
 
   void display() {
@@ -88,27 +85,35 @@ class Spheredef {
     //Save copy of current world
     pushMatrix(); 
     translate(sphereCenter.x, sphereCenter.y, -1*(sphereCenter.z));
-    fill(red(fillColor),blue(fillColor),green(fillColor),255);
+    fill(red(fillColor), blue(fillColor), green(fillColor), 255);
     sphere(sphereRadius);
     popMatrix();
   }
 
 
   void move() {
-    int choice = int(random(24));
-  }
+    int stepSize = 11;
+    int directionX = int(random(-1*stepSize,stepSize));
+    int directionY = int(random(-1*stepSize,stepSize));
+    int directionZ = int(random(-1*stepSize,stepSize));
+    println(directionX);
+    sphereCenter.x += directionX;
+    sphereCenter.y += directionY;
+    sphereCenter.z += directionZ;
+    
+    }
 
-  void rotSphere() {
+    void rotSphere() {
 
-    rotateY(radians(frameCount));
-  }
+      rotateY(radians(frameCount));
+    }
 
-  void setColor(float red, float blue, float green) {
-    fillColor=strokeColor=color(red, blue, green);
+    void setColor(float red, float blue, float green) {
+      fillColor=strokeColor=color(red, blue, green);
+    }
+
+    void setRadius(int radius) {
+      sphereRadius = radius;
+    }
   }
-  
-  void setRadius(float radius) {
-      sphereRadius = random(radius);
-}
-}
 
