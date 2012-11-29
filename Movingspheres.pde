@@ -9,6 +9,7 @@
  1. Create multiple instances of balls in a sphere class #Complete
  3. Create constructor that builds each new ball #Complete
  3. Add velocity vectors to ball Move function
+ 5.  Need to figure out how to isolate rotations for each instance
  4. Add lightening within the ball
  5. Change instance user wants to control
  6. Manipulate shape of object - Make sphere appear to boil with certain gestures
@@ -66,14 +67,14 @@ void draw() {
   float n2= noise(yoff);
   xoff+=0.1;
   yoff+=0.1;
-  t+=0.001;
+  t+=0.1;
   
   //Random Move uses Perlin
   sphere1.randomMove(n1,n2);
   sphere1.setColor(red, green, blue);
   sphere1.display();
   float vi_x=1;
-  float a_x= 30;
+  float a_x= 3;
   
    sphere3.vMove(t, vi_x,a_x);
   sphere3.display();
@@ -126,8 +127,8 @@ class Spheredef {
   
   //Generates movement of sphere based on controlled paramteres
   void vMove(float t,float vi_x,float a_x){
-    float xoff=vi_x*t+0.5*a_x*pow(t,2);
-    sphereCenter.x += xoff;
+    sphereCenter.x=vi_x*t+0.5*a_x*pow(t,2);
+    println(sphereCenter.x);
   }
   
   //Generates movement of sphere based on random functions and perlin noise
