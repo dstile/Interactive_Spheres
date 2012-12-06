@@ -47,16 +47,13 @@ void setup() {
   //initialize all new instances
   //sphere1 = new Spheredef(int(random(0,width)), int(random(0,height)),-1000);
  
+  //Constructor (pos_x, pos_y,pos_z,vel_x,vel_y,vel_z,accel_x, accel_y, accel_z, rot_x, rot_y, rot_z);
+  sphere1 = new Spheredef(0,0,0,0,0,0,0,0,0,0,0,0);
+  sphere2 = new Spheredef(0, 200, -1000,0,0,0,0,0,0,0,0,0);
+  sphere3 = new Spheredef(100,200,0, 1,1,0, 0.001,0,0, 0,0, 0);
+  sphere4 = new Spheredef(-200,-200,500,0,0,0,0,0,0,0,0,0);
+  sphere5 = new Spheredef(500,100,0,0,0,0,0,0,0,0,0,0);
   
-  sphere1 = new Spheredef(0,0,0);
-  sphere2 = new Spheredef(0, 200, -1000);
-  sphere3 = new Spheredef(0, 0, 0);
-  sphere4 = new Spheredef(-200, -200, 500);
-  sphere5 = new Spheredef(500, 100, 0);
-  
-  
-
-
   //create a camera - arguments set point to look at and distance from that point
   cam = new PeasyCam (this,0,0,0,2000);
   //cam.setMinimumDistance(50);
@@ -65,7 +62,9 @@ void setup() {
 
 void draw() {
   background(250);
+  //Inverting Y and Z directions so processing coordinates match with kinect direction
   rotateX(radians(180));
+  //Setting the origin of the sketch to the center
   translate(width/2, -1*(height/2), 1000);
   float xoff=0;
   float yoff=1000;
@@ -74,74 +73,69 @@ void draw() {
   xoff+=0.1;
   yoff+=0.1;
   t+=0.1;
-  PVector sphere3vel = new PVector(1,0,0);
-  PVector sphere3accel = new PVector(0.1,0,0); 
-
   
+  
+ 
+ 
   //Random Move uses Perlin
-  sphere1.randomMove(n1,n2);
-  sphere1.setColor(red, green, blue);
-  sphere1.display(new PVector(0,0,0));
-  sphere2.display(new PVector(0,0,0));
+  //sphere1.randomMove(n1,n2);
+ // sphere1.setColor(red, green, blue);
+  //sphere1.update(new PVector(0,0,0));
+  //sphere1.display();
+  //sphere2.update(new PVector(0,0,0));
+  //sphere2.display();
   //moves the sphere along the x-axis according to specified initial x_velocity and x_acceleration
-  sphere3.Move(t, sphere3vel, sphere3accel);
-  sphere3.sphererot.y=frameCount;
-  println(sphere3.sphererot);
-  sphere3.display(sphere3.sphererot);
+  sphere3.movement();
+  //sphere3.sphererot.y=frameCount;
+  sphere3.display();
   
   //This function uses velocity vectors to control movement
  
-  sphere4.display(new PVector(0,0,0));
-  sphere5.display(new PVector(0,0,0));
+  //sphere4.display(new PVector(0,0,0));
+  //sphere5.display(new PVector(0,0,0));
 }
 
 //Sphere Class
 class Spheredef {
-  PVector sphereCenter;
-  PVector sphereColor;
-  PVector rotation;
-  int centerX;
-  int centerY;
-  int centerZ;
-  color fillColor;
-  color strokeColor;
-  int red;
-  int green;
-  int blue;
-  int sphereRadius;
-  float vi_x;
-  float a_x;
-  PVector sphererot;
+  PVector sphereCenter, sphereColor, rotation, velocity, acceleration;
+  color fillColor, strokeColor;
+  int red, green, blue, sphereRadius;
+  float topSpeed=10;
+  //float vi_x;
+  //float a_x;
+  
   
   //Constructor
-  Spheredef(int x, int y, int z) {
-    centerX=x;
-    centerY=y;
-    centerZ=z;
+  Spheredef(int x_, int y_, int z_, int vel_x, int vel_y, int vel_z, float accel_x, float accel_y, float accel_z, int rot_x, int rot_y, int rot_z) {
     sphereRadius=int(random(200));
     fillColor=strokeColor=color(random(255), random(255), random(255));
-    sphereCenter= new PVector(centerX, centerY, centerZ);
-    sphererot= new PVector(0,0,0);
+    sphereCenter= new PVector(x_, y_, z_);
+    rotation= new PVector(rot_x, rot_y, rot_z);
+    velocity = new PVector(vel_x, vel_y, vel_z);
+    acceleration = new PVector(accel_x, accel_y, accel_z);
   }
 
+ //Update location coordinate
+ //Generates movement of sphere based on accel and vel
+   void movement() {
+     velocity.limit(topSpeed);
+     velocity.add(acceleration);
+     sphereCenter.add(velocity);
+     
+     //sphereCenter.x=v_i.x*t+0.5*a.x*pow(t,2); Time function does not work here the same
+   }
+ 
  // Draws Sphere
-  void display(PVector rot) {
+  void display() {
     //Save copy of current world
-    
-   pushMatrix(); 
+    pushMatrix(); 
     translate(sphereCenter.x, sphereCenter.y, -1*(sphereCenter.z));
-    rotateX(radians(rot.x));
-    rotateY(radians(rot.y));
-    rotateZ(radians(rot.z));
+    rotateX(radians(rotation.x));
+    rotateY(radians(rotation.y));
+    rotateZ(radians(frameCount));
     fill(red(fillColor), blue(fillColor), green(fillColor), 255);
     sphere(sphereRadius);
-   popMatrix();
-   
-  }
-  
-  //Generates movement of sphere based on controlled paramteres
-  void Move(float t,PVector v_i,PVector a){
-    sphereCenter.x=v_i.x*t+0.5*a.x*pow(t,2);
+    popMatrix();
   }
   
   //Generates movement of sphere based on random functions and perlin noise
