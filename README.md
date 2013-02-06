@@ -1,7 +1,7 @@
 Interactive_Spheres
 ===================
 
-#Interactive 3D sphere application
+##3D sphere application for fun visualizations
 
 ## Features
 
